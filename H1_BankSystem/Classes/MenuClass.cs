@@ -18,6 +18,8 @@ namespace H1_BankSystem.Classes
         public int ActiveMenu { get; set; }
         public int HoveredItem { get; set; } = 0;
 
+        object ItemBeingViewed { get; set; }
+
         public ViewModel currentViewModel { get; set; }
 
         public void MenuHandler()
@@ -73,12 +75,36 @@ namespace H1_BankSystem.Classes
                     break;
 
                 case ConsoleKey.Enter:
+                    MenuActivateItem();
                     break;
 
                 case ConsoleKey.Escape:
+                    MenuDeactivateItem();
                     break;
 
                 case ConsoleKey.Backspace:
+                    break;
+            }
+        }
+
+        private void MenuActivateItem()
+        {
+            switch (currentViewModel)
+            {
+                case ViewModel.CustomerList_Teller:
+                    currentViewModel = ViewModel.CustomerDetails_Teller;
+                    ItemBeingViewed = DataService.UserList[HoveredItem];
+                    break;
+            }
+
+        }
+
+        private void MenuDeactivateItem()
+        {
+            switch (currentViewModel)
+            {
+                case ViewModel.CustomerDetails_Teller:
+                    currentViewModel = ViewModel.CustomerList_Teller;
                     break;
             }
         }
@@ -187,8 +213,12 @@ namespace H1_BankSystem.Classes
                     Ui.ShowCustomerList(DataService.UserList, 2, 0);
                     break;
 
+                case ViewModel.CustomerDetails_Teller:
+                    Ui.ShowCustomerDetails((UserService.UserClass)ItemBeingViewed, 2);
+                    break;
+
                 case ViewModel.AccountList_Teller:
-                    Ui.ShowAccountList(User.CurrentUser, 2, 0);
+                    Ui.ShowAccountListDetailed(User.CurrentUser, 2, 0);
                     break;
             }
 
@@ -265,6 +295,7 @@ namespace H1_BankSystem.Classes
             public string Name { get; set; }
             public string DisplayName { get; set; }
             public ViewModel RelatedViewModel { get; set; }
+
         }
 
         public enum ViewModel

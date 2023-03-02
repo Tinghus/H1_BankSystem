@@ -53,7 +53,7 @@ namespace H1_BankSystem.Classes
                     users[i].LastName.PadRight(12) +
                     users[i].Email.PadRight(26) +
                     users[i].CreationDate.ToShortDateString().PadRight(16) +
-                    Convert.ToString(User.GetTotalBalance(users[i])) +
+                    User.GetTotalBalance(users[i]).ToString("0.00") +
                     " DKK";
 
                 if (i == Menu.HoveredItem)
@@ -69,7 +69,43 @@ namespace H1_BankSystem.Classes
             }
         }
 
-        public void ShowAccountList(UserService.UserClass loggedInAs, int cursorPosTop, int startIndex)
+        public void ShowCustomerDetails(UserService.UserClass customer, int cursorPosTop)
+        {
+            Console.CursorTop = cursorPosTop;
+            int padding = 16;
+
+            Console.WriteLine("".PadRight(padding));
+
+            Console.WriteLine("Id:".PadRight(padding) + customer.Id.ToString());
+            Console.WriteLine("Account Type:".PadRight(padding) + customer.UserType.ToString());
+            Console.WriteLine("Created Date:".PadRight(padding));
+            Console.WriteLine("Username:".PadRight(padding) + customer.Username);
+            Console.WriteLine("Email:".PadRight(padding) + customer.Email);
+
+            Console.WriteLine();
+
+            Console.WriteLine("Name:".PadRight(padding) + customer.FirstName + " " + customer.LastName);
+            Console.WriteLine("Birthday".PadRight(padding) + customer.Birthday.ToShortDateString());
+            Console.WriteLine("Account Value:".PadRight(padding) + User.GetTotalBalance(customer).ToString() + " DKK");
+
+            Console.WriteLine();
+
+            Console.WriteLine("Accounts:");
+            ShowAccountListCustomer(customer, cursorPosTop + 12);
+
+        }
+
+        public void ShowAccountListCustomer(UserService.UserClass user, int cursorPosTop)
+        {
+            Console.Write(
+                "Id".PadRight(10) +
+                "Account Name".PadRight(14) +
+                "Balance".PadRight(12) +
+                "Account Created"
+                );
+        }
+
+        public void ShowAccountListDetailed(UserService.UserClass loggedInAs, int cursorPosTop, int startIndex)
         {
             Console.CursorTop = cursorPosTop;
 
@@ -77,7 +113,7 @@ namespace H1_BankSystem.Classes
                 "Id".PadRight(10) +
                 "Account Holder".PadRight(24) +
                 "Account Name".PadRight(14) +
-                "Balance".PadRight(12) +
+                "Balance".PadRight(16) +
                 "Account Created"
                 );
 
@@ -94,7 +130,7 @@ namespace H1_BankSystem.Classes
                         AccountList[i].Id.ToString().PadRight(10) +
                         User.GetUserFullName(AccountList[i].AccountHolderId).PadRight(24) +
                         AccountList[i].Name.PadRight(14) +
-                        GetBalanceWithCurrency(AccountList[i]).PadRight(12) +
+                        GetBalanceWithCurrency(AccountList[i]).PadRight(16) +
                         AccountList[i].CreationDate.ToShortDateString();
 
                     if (AccountList[i].Balance < 0 && i != Menu.HoveredItem)
@@ -194,7 +230,11 @@ namespace H1_BankSystem.Classes
 
         private string GetBalanceWithCurrency(AccountService.AccountData account)
         {
-            return (account.Balance.ToString() + " " + account.Currency.ToString()).PadLeft(8);
+            string leadingSign = account.Balance < 0 ? "" : "+";
+
+            return ((leadingSign + account.Balance.ToString("0.00")).PadLeft(8) + " " + account.Currency.ToString());
+
+            //return (account.Balance.ToString("0.00").PadLeft(padding) + " " + account.Currency.ToString());
         }
 
         public void ApplyEffect(string output, Effect effect)

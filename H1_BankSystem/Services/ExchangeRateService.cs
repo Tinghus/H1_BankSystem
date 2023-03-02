@@ -14,8 +14,8 @@ namespace H1_BankSystem.Services
             { "DKK_USD", 6.0m },
             { "EUR_DKK", 7.5m / 1.0m },
             { "EUR_USD", 0.85m },
-            { "USD_DKK", /1.0m / 6.0m },
-            { "USD_EUR", 1.0m / 0.85m },
+            { "USD_DKK", 6.0m / 1.0m},
+            { "USD_EUR", 0.85m / 1.0m },
         };
 
         public static decimal ConvertCurrency(AccountService.AccountData.CurrencyType fromCurrency, AccountService.AccountData.CurrencyType toCurrency, decimal amount)
