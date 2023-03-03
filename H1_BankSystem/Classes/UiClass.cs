@@ -86,7 +86,7 @@ namespace H1_BankSystem.Classes
 
             Console.WriteLine("Name:".PadRight(padding) + customer.FirstName + " " + customer.LastName);
             Console.WriteLine("Birthday".PadRight(padding) + customer.Birthday.ToShortDateString());
-            Console.WriteLine("Account Value:".PadRight(padding) + User.GetTotalBalance(customer).ToString() + " DKK");
+            Console.WriteLine("Account Value:".PadRight(padding) + User.GetTotalBalance(customer).ToString("0.00") + " DKK");
 
             Console.WriteLine();
 
@@ -100,10 +100,40 @@ namespace H1_BankSystem.Classes
             Console.Write(
                 "Id".PadRight(10) +
                 "Account Name".PadRight(14) +
-                "Balance".PadRight(12) +
+                "Balance".PadRight(16) +
                 "Account Created"
                 );
+
+
+            Console.WriteLine();
+
+            for (int i = 0; i < user.AccountList.Count; i++)
+            {
+                AccountService.AccountData account = user.AccountList[i];
+                string output =
+                    account.Id.ToString().PadRight(10) +
+                    account.Name.PadRight(14) +
+                    GetBalanceWithCurrency(account).PadRight(16) +
+                    account.CreationDate.ToShortDateString();
+
+                if (account.Balance < 0 && i != Menu.HoveredItem)
+                {
+                    ApplyEffect(output, Effect.NegativeBalance);
+                }
+                else if (i == Menu.HoveredItem)
+                {
+                    ApplyEffect(output, Effect.ActiveMenuItem);
+                }
+                else
+                {
+                    Console.Write(output);
+                }
+
+                Console.WriteLine();
+            }
+
         }
+
 
         public void ShowAccountListDetailed(UserService.UserClass loggedInAs, int cursorPosTop, int startIndex)
         {
@@ -233,8 +263,6 @@ namespace H1_BankSystem.Classes
             string leadingSign = account.Balance < 0 ? "" : "+";
 
             return ((leadingSign + account.Balance.ToString("0.00")).PadLeft(8) + " " + account.Currency.ToString());
-
-            //return (account.Balance.ToString("0.00").PadLeft(padding) + " " + account.Currency.ToString());
         }
 
         public void ApplyEffect(string output, Effect effect)

@@ -94,7 +94,9 @@ namespace H1_BankSystem.Classes
                 case ViewModel.CustomerList_Teller:
                     currentViewModel = ViewModel.CustomerDetails_Teller;
                     ItemBeingViewed = DataService.UserList[HoveredItem];
+                    HoveredItem = 0;
                     break;
+
             }
 
         }
@@ -171,6 +173,15 @@ namespace H1_BankSystem.Classes
 
                 case ViewModel.AccountList_Teller:
                     return DataService.AccountList.Count - 1;
+
+                case ViewModel.CustomerDetails_Teller:
+                    UserClass? user = ItemBeingViewed as UserClass;
+
+                    if (user.AccountList.Count <= 0)
+                    {
+                        return 0;
+                    }
+                    return user?.AccountList.Count - 1 ?? 0;
 
                 default:
                     return 0;
