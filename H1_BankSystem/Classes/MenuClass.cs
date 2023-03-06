@@ -97,6 +97,11 @@ namespace H1_BankSystem.Classes
                     HoveredItem = 0;
                     break;
 
+                case ViewModel.AccountList_Teller:
+                    currentViewModel = ViewModel.AccountDetails;
+                    ItemBeingViewed = DataService.AccountList[HoveredItem];
+                    HoveredItem = 0;
+                    break;
             }
 
         }
@@ -231,6 +236,10 @@ namespace H1_BankSystem.Classes
                 case ViewModel.AccountList_Teller:
                     Ui.ShowAccountListDetailed(User.CurrentUser, 2, 0);
                     break;
+
+                case ViewModel.AccountDetails:
+                    Ui.ShowAccountDetails((AccountService.AccountData)ItemBeingViewed, 2);
+                    break;
             }
 
         }
@@ -314,6 +323,7 @@ namespace H1_BankSystem.Classes
             Login,
             CustomerList_Teller,
             CustomerDetails_Teller,
+            AccountDetails,
             Deposit_Teller,
             Withdraw_Teller,
             Transfer_Teller,

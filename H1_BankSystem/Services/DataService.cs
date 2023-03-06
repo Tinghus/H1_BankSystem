@@ -29,7 +29,6 @@ namespace H1_BankSystem.Services
             CreateDummyData();
             UserList = UserList.OrderBy(u => u.FirstName).ToList();
             AccountList = AccountList.OrderBy(a => a.Id).ToList(); // TODO remove if still uneeded later
-
         }
 
         private static bool IsConnected(string connectionString)

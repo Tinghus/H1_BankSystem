@@ -182,6 +182,39 @@ namespace H1_BankSystem.Classes
             }
         }
 
+        public void ShowAccountDetails(AccountService.AccountData account, int cursorPosTop)
+        {
+            int padding = 16;
+
+            Console.WriteLine("(D)eposit");
+            Console.WriteLine("(W)ithdraw");
+            Console.WriteLine("(T)ransfer");
+            Console.WriteLine();
+
+            Console.WriteLine("Account Id:".PadRight(padding) + account.Id.ToString());
+
+            if (User.CurrentUser.UserType != UserService.UserClass.UserTypes.AccountHolder)
+            {
+                Console.WriteLine("Account Holder Name:" + User.GetUserFullName(account.AccountHolderId));
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("Account:".PadRight(padding) + account.Name);
+            Console.WriteLine("Currency:".PadRight(padding) + account.Currency.ToString());
+            Console.Write("Balance:".PadRight(padding));
+
+            string output = GetBalanceWithCurrency(account);
+
+            if (account.Balance < 0)
+            {
+                ApplyEffect(output, Effect.NegativeBalance);
+            }
+            else
+            {
+                Console.WriteLine(output);
+            }
+        }
+
         public void ShowLoginForm()
         {
             int cursorTopStart = (Console.WindowHeight / 2) - 2;
